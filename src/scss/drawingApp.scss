@@ -1,0 +1,39 @@
+@import './var.scss';
+
+.drawing-board {
+    max-width: 1300px;
+    height: 700px;
+    border: 1px solid #000;
+    margin: 0 auto;
+}
+
+.drawing-board-container {
+    padding: 4rem 1rem;
+}
+
+.drawing-board-colors {
+    display: flex;
+    flex-direction: column;
+    & button {
+        width: 100%;
+        border-radius: 0;
+        border: none;
+        padding: 1rem .5rem;
+        font-size: 2rem;
+    }
+}
+
+.drawing-clrs {
+    display: flex;
+    flex-direction: row;
+    & button {
+        width: 100%;
+        border-radius: 0;
+        border: none;
+        padding: 3rem .5rem;
+    }
+}
+
+.clear-canvas {
+    background-color: transparent;
+}

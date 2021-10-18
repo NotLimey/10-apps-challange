@@ -1,0 +1,29 @@
+@import './var.scss';
+
+html {
+    font-size: 10px;
+}
+
+body {
+    margin: 0;
+    font-family: $font-poppins;
+}
+
+* { box-sizing: border-box; -moz-box-sizing: border-box;}
+
+.p-t-5 {
+    padding-top: 5rem;
+}
+.fullwidth {
+    width: 100%;
+}
+
+.projects {
+    display: flex;
+    flex-direction: column;
+    & a {
+        display: block;
+        width: auto;
+        font-size: 2rem;
+    }
+}

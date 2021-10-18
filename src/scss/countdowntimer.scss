@@ -1,0 +1,30 @@
+@import './var.scss';
+
+.countdown-container {
+    background-image: url(../img/Snow.jpg);
+    min-height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.new-years {
+    font-size: 3.5rem;
+    margin-top: 10rem;
+} 
+
+.clock {
+    display: flex;
+    justify-content: center;
+    column-gap: 40px;
+    color: rgb(31, 30, 37);
+    & * {
+        margin: 0;
+    }
+    & h1 {
+        font-size: 3rem;
+    }
+}
