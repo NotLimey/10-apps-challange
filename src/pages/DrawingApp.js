@@ -1,80 +1,69 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import '../scss/drawingApp.scss';
 
 const DrawingApp = () => {
-    const [Color, setColor] = useState('green')
+    const [Color, setColor] = useState()
     const [PencilSize, setPencilSize] = useState(10)
+    const ctx = useRef();
 
     var canvas;
-    var ctx;
+    var drawingboard;
     var start = 0;
     var end = Math.PI * 2;
     var dragging = false;
-    var drawingboard;
+
     useEffect(() => {
-        canvas = document.getElementById('canvas');
-        ctx = canvas.getContext('2d');
-        drawingboard = window.document.getElementById('drawing-board')
+        ctx.current = canvas.getContext('2d');
         
         canvas.width = drawingboard.offsetWidth;
         canvas.height = drawingboard.offsetHeight;
 
-
         canvas.addEventListener('mousedown', engage);
         canvas.addEventListener('mousemove', putPoint);
-        canvas.addEventListener('mouseup', disengage);
+        document.addEventListener('mouseup', disengage);
     }, [])
 
     useEffect(() => {
-        console.log(PencilSize);
-        canvas = document.getElementById('canvas');
-        ctx = canvas.getContext('2d');
-        ctx.strokeStyle = Color;
-        ctx.fillStyle = Color;
-        ctx.lineWidth = PencilSize * 2;
-        canvas.addEventListener('mousedown', engage);
-        canvas.addEventListener('mousemove', putPoint);
-        canvas.addEventListener('mouseup', disengage);
+        ctx.current.lineWidth = PencilSize * 2;
     }, [Color, PencilSize])
+
 
     var putPoint = function(e){
         if(dragging){
-            ctx.lineTo(e.offsetX, e.offsetY);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.arc(e.offsetX, e.offsetY, PencilSize, start, end);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.moveTo(e.offsetX, e.offsetY);
+            ctx.current.lineTo(e.offsetX, e.offsetY);
+            ctx.current.stroke();
+            ctx.current.beginPath();
+            ctx.current.arc(e.offsetX, e.offsetY, PencilSize / 42, start, end);
+            ctx.current.fill();
+            ctx.current.stroke();
+            ctx.current.beginPath();
+            ctx.current.moveTo(e.offsetX, e.offsetY);
         }
     }
 
     var engage = function(e){
-        ctx.strokeStyle = Color;
         dragging = true;
         putPoint(e);
     }
 
     var disengage = function(){
         dragging = false;
-        ctx.beginPath();
+        ctx.current.beginPath();
     }
 
     const ChangeColor = (color) => {
-        console.log('Changed color to: ' + color)
         setColor(color);
+        ctx.current.strokeStyle = color;
+        ctx.current.fillStyle = color;
     }
 
     const ClearCanvas = () => {
-        drawingboard = window.document.getElementById('drawing-board')
-        
         canvas.width = drawingboard.offsetWidth;
         canvas.height = drawingboard.offsetHeight;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        ctx.lineWidth = PencilSize * 2;
-        ctx.strokeStyle = Color;
-        ctx.fillStyle = Color;
+        ctx.current.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.current.lineWidth = PencilSize * 2;
+        ctx.current.strokeStyle = Color;
+        ctx.current.fillStyle = Color;
     }
 
     return (
@@ -111,8 +100,8 @@ const DrawingApp = () => {
                 </div>
             </div>
             <div class="drawing-board-container">
-                <div id="drawing-board" className="drawing-board">
-                    <canvas id="canvas" style={{display: 'block'}}>
+                <div ref={drawingboardElement => drawingboard = drawingboardElement} id="drawing-board" className="drawing-board">
+                    <canvas ref={canvasElement => canvas = canvasElement} id="canvas" style={{display: 'block'}}>
                         Sorry, your browser is rubbish.
                     </canvas>
                 </div>
